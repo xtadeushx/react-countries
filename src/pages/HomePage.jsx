@@ -1,20 +1,30 @@
 import React, { useEffect, useState } from 'react';
-// import axios from 'axios';
-import { useParams, Link } from 'react-router-dom';
+ import axios from 'axios';
+import {  Link } from 'react-router-dom';
 import { List } from '../components/List';
 import Controls from '../components/Controls';
 import { Card } from '../components/Card';
-// import { ALL_COUNTRIES } from '../config';
+ import { ALL_COUNTRIES } from '../config';
 
-const HomePage = ({ countries }) => {
-  const { name } = useParams();
-  //   const [countries, setCountries] = useState([]);
-  // const a = useParams();
-  // console.log(a);
-  //   useEffect(() => {
-  //     axios.get(ALL_COUNTRIES).then(({ data }) => setCountries(data));
-  //   }, []);
-  //   console.log(countries);
+const HomePage = ({ setIsLoading }) => {
+  const [countries, setCountries] = useState([]);
+
+
+  useEffect(() => {
+    setIsLoading(prev=> !prev);
+    setTimeout(() => {
+      getFetchCountries();
+      setIsLoading(prev=> !prev);
+    }, 2000);
+  }, []);
+
+  const getFetchCountries = async () => {
+    try {
+      await axios.get(ALL_COUNTRIES).then(({ data }) => setCountries(data));
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
   return (
     <>
       {' '}

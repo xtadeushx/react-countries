@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Container as Container } from './Conteiner';
+import {Container } from './Conteiner';
 import { IoMoon, IoMoonOutline } from 'react-icons/io5';
 
 const HeaderEl = styled.header`
@@ -57,4 +57,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export  {Header};

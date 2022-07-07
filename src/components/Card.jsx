@@ -3,10 +3,14 @@ import styled from 'styled-components';
 
 const Wrapper = styled.article`
   border-radius: var(--radii);
-  background-color: car(--colors-ui-base);
+  background-color: var(--colors-ui-base);
   box-shadow: var(--shadow);
   cursor: pointer;
   overflow: hidden;
+  &:hover{
+    transform:scale(1.1);
+    transition: transform 0.7s ease-in-out;
+  }
 `;
 const CardImage = styled.img`
   display: block;

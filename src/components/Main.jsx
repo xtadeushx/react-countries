@@ -1,8 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
+
 import { Container } from './Conteiner';
-import Controls from './Controls';
-import Search from './Search';
 
 const Wrapper = styled.main`
 padding: 2rem 0;
@@ -25,4 +24,4 @@ const Main = ({children}) => {
   );
 };
 
-export default Main;
+export {Main};

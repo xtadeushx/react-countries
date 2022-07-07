@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom';
 
 import { filterByCode } from '../config';
 
@@ -75,6 +75,9 @@ const TagGroup = styled.div`
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;
+  & > a {
+    text-decoration: none;
+  }
 `;
 
 const Tag = styled.span`
@@ -83,6 +86,8 @@ const Tag = styled.span`
   box-shadow: var(--shadow);
   line-height: 1.5;
   cursor: pointer;
+  text-decoration: none;
+  color: var(--colors-text);
 `;
 
 export const Info = (props) => {
@@ -103,14 +108,21 @@ export const Info = (props) => {
   const [neighbors, setNeighbors] = useState([]);
 
   useEffect(() => {
-    if (borders.length)
-      axios
-        .get(filterByCode(borders))
-        .then(({ data }) => {
-          console.log(data)
-          setNeighbors(data.map((c) => c.name))});
+    if (borders.length) {
+      getFetchBordersCountries();
+    }
   }, []);
-// console.log(borders);
+
+  const getFetchBordersCountries = async () => {
+    try {
+      await axios
+        .get(filterByCode(borders))
+        .then(({ data }) => setNeighbors(data.map((c) => c.name)));
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
+
   return (
     <Wrapper>
       <InfoImage src={flag} alt={name} />
@@ -163,12 +175,9 @@ export const Info = (props) => {
           ) : (
             <TagGroup>
               {neighbors.map((b) => (
-                  <Link style={{backgroundColor: 'tomato'}} key={b} to={`/country/${b}`}>
-                     <Tag>
-                  {b}
-                </Tag>
-                  </Link>
-               
+                <Link key={b} to={`/country/${b}`}>
+                  <Tag>{b}</Tag>
+                </Link>
               ))}
             </TagGroup>
           )}
