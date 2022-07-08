@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { CustomSelect } from './CustomSelect';
 import Search from './Search';
+import { Sort } from './Sort';
 
 const options = [
   { value: 'Africa', label: 'Africa' },
@@ -36,6 +37,7 @@ const Controls = ({ onSearch }) => {
     <>
       <Wrapper>
         <Search search={search} setSearch={setSearch} />
+        <Sort/>
         <CustomSelect
           options={options}
           placeholder="filter by region"

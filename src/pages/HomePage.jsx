@@ -24,7 +24,8 @@ const HomePage = ({ setIsLoading }) => {
     }
   };
 
-  const handleSearch = useMemo(() => (search, region) => {
+  const handleSearch = useMemo(
+    () => (search, region) => {
       let data = [...countries];
       if (region) {
         data = data.filter((item) => item.region.includes(region));
@@ -33,11 +34,35 @@ const HomePage = ({ setIsLoading }) => {
         data = data.filter((item) => item.name.toLowerCase().startsWith(search.toLowerCase()));
       }
       setFilteredCountries(data);
-    },[countries]);
+    },
+    [countries],
+  );
 
   useEffect(() => {
     handleSearch();
   }, [countries]);
+
+  const handleSort = () => (sort) => {
+    let data = [...filteredCountries];
+    switch (sort) {
+      case 'population-up':
+        data = data.sort((a, b) => a.population - b.population);
+        break;
+      case 'population-down':
+        data = data.sort((a, b) => b.population - a.population);
+        break;
+      case 'alphabet-down':
+        data = data.sort((a, b) => b.name - a.name);
+        break;
+      case 'alphabet-up':
+        data = data.sort((a, b) => a.name - b.name);
+        break;
+
+      default: data = data;
+        break;
+    }
+    return data;
+  };
 
   return (
     <>
