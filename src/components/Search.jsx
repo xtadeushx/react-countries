@@ -33,7 +33,7 @@ color: var( --colors-text );
 background-color: var( --colors-ui-bas);
 `;
 
-const Search = ({search, setSearch}) => {
+const Search = ({search, setSearch, }) => {
   return (
     <InputContainer>
         <IoSearch/>

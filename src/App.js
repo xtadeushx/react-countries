@@ -11,7 +11,7 @@ import {MyLoader} from './components/MyLoader';
 
 function App() {
   const [isLoading, setIsLoading] = useState(false);
- 
+  const [countries, setCountries] = useState([]);
 
   return (
     <>
@@ -19,7 +19,7 @@ function App() {
       <Main>
        
         <Routes>
-          <Route path="/" element={<HomePage setIsLoading={setIsLoading} />} />
+          <Route path="/" element={<HomePage setIsLoading={setIsLoading} countries={countries} setCountries={setCountries} />} />
           <Route path="country/:name" element={<Details  />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
