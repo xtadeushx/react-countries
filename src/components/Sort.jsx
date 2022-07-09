@@ -3,13 +3,15 @@ import React, { useEffect, useRef, useState } from 'react';
 import clsx from 'clsx';
 const Sort = ({onChangeSortValue}) => {
   const [isShow, setIsShow] = useState(false);
-  const [sortName, setSortName] = useState({ label: 'population(A-Z)', value: 'population-up' });
+  const [sortName, setSortName] = useState({ label: 'alphabet (A-Z)', value: 'alphabetUp' });
   const sortRef = useRef();
   const options = [
     { label: 'population (A-Z)', value: 'populationUp' },
-    { label: 'population (Z-A)', value: 'populationDawn' },
+    { label: 'population (Z-A)', value: 'populationDown' },
     { label: 'alphabet (A-Z)', value: 'alphabetUp' },
-    { label: 'alphabet (Z-A)', value: 'alphabetDawn' },
+    { label: 'alphabet (Z-A)', value: 'alphabetDown' },
+    { label: 'capital (A-Z)', value: 'capitalUp' },
+    { label: 'capital (Z-A)', value: 'capitalDown' },
   ];
   const handleToggleVisible = () => {
     setIsShow((prev) => !prev);
@@ -55,6 +57,7 @@ const Sort = ({onChangeSortValue}) => {
             <li key={Date.now() + '-' + index} onClick={()=>{
               setSortName(item)
               onChangeSortValue(item.value)
+            
             }}>{item.label}</li>
           ))}
         </ul>

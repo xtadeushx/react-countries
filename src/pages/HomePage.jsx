@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useReducer, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { List } from '../components/List';
@@ -6,10 +6,12 @@ import Controls from '../components/Controls';
 import { Card } from '../components/Card';
 import { ALL_COUNTRIES } from '../config';
 
+let colorator = new Intl.Collator();
+
 const HomePage = ({ setIsLoading }) => {
   const [countries, setCountries] = useState([]);
   const [filteredCountries, setFilteredCountries] = useState(countries);
-  const [sortValues, setSortValues] = useState('');
+  const [sortValues, setSortValues] = useState('alphabetUp');
 
   useEffect(() => {
     setIsLoading((prev) => !prev);
@@ -43,37 +45,44 @@ const HomePage = ({ setIsLoading }) => {
     handleSearch();
   }, [countries]);
 
-  function handleSort(sort){
-    console.log(sort);
-    let data=[...filteredCountries];
-    if (sort === 'populationUp') {
-      data = data.sort((a, b) => a.population - b.population);
+  useEffect(() => {
+    handleSortFunc(sortValues);
+  }, [sortValues]);
+
+
+  function handleSortFunc(sort) {
+    let data = JSON.parse(JSON.stringify(filteredCountries));
+
+    switch (sort) {
+      case 'populationUp':
+        data.sort((a, b) => a.population - b.population);
+        break;
+      case 'populationDown':
+        data.sort((a, b) => a.population - b.population).reverse();
+        break;
+      case 'alphabetDown':
+        data.sort((a, b) => colorator.compare(b.name, a.name));
+        break;
+      case 'alphabetUp':
+        data.sort((a, b) => colorator.compare(a.name, b.name));
+        break;
+      case 'alphabetDown':
+        data.sort((a, b) => colorator.compare(a.name, b.name)).reverse();
+        break;
+      case 'capitalUp':
+        data.sort((a, b) => colorator.compare(a.capital, b.capital));
+        break;
+      case 'capitalDown':
+        data.sort((a, b) => colorator.compare(a.capital, b.capital)).reverse();
+        break;
+
+      default:
+      return  data;
     }
-    if (sort === 'populationDown') {
-      data = data.sort((a, b) => b.population - a.population);
-    }
-    if (sort === 'alphabetDown') {
-      data = data.sort((a, b) => b.name - a.name);
-    }
-    if (sort === 'alphabetUp') {
-      data = data.sort((a, b) => a.name.toLowerCase() - b.name.toLowerCase());
-    }
-    if (sort === '') {
-      return data;
-    }
-    console.log(data);
-    // setFilteredCountries(data);
     setFilteredCountries(data);
   };
 
   const onChangeSortValue = (data) => setSortValues(data);
-
-  useEffect(() => {
-    console.log('object');
-    handleSort(sortValues);
-    //console.log(sortValues);
-  }, [sortValues]);
-
 
   return (
     <>
