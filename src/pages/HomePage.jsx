@@ -9,6 +9,7 @@ import { ALL_COUNTRIES } from '../config';
 const HomePage = ({ setIsLoading }) => {
   const [countries, setCountries] = useState([]);
   const [filteredCountries, setFilteredCountries] = useState(countries);
+  const [sortValues, setSortValues] = useState('');
 
   useEffect(() => {
     setIsLoading((prev) => !prev);
@@ -42,32 +43,42 @@ const HomePage = ({ setIsLoading }) => {
     handleSearch();
   }, [countries]);
 
-  const handleSort = () => (sort) => {
-    let data = [...filteredCountries];
-    switch (sort) {
-      case 'population-up':
-        data = data.sort((a, b) => a.population - b.population);
-        break;
-      case 'population-down':
-        data = data.sort((a, b) => b.population - a.population);
-        break;
-      case 'alphabet-down':
-        data = data.sort((a, b) => b.name - a.name);
-        break;
-      case 'alphabet-up':
-        data = data.sort((a, b) => a.name - b.name);
-        break;
-
-      default: data = data;
-        break;
+  function handleSort(sort){
+    console.log(sort);
+    let data=[...filteredCountries];
+    if (sort === 'populationUp') {
+      data = data.sort((a, b) => a.population - b.population);
     }
-    return data;
+    if (sort === 'populationDown') {
+      data = data.sort((a, b) => b.population - a.population);
+    }
+    if (sort === 'alphabetDown') {
+      data = data.sort((a, b) => b.name - a.name);
+    }
+    if (sort === 'alphabetUp') {
+      data = data.sort((a, b) => a.name.toLowerCase() - b.name.toLowerCase());
+    }
+    if (sort === '') {
+      return data;
+    }
+    console.log(data);
+    // setFilteredCountries(data);
+    setFilteredCountries(data);
   };
+
+  const onChangeSortValue = (data) => setSortValues(data);
+
+  useEffect(() => {
+    console.log('object');
+    handleSort(sortValues);
+    //console.log(sortValues);
+  }, [sortValues]);
+
 
   return (
     <>
       {' '}
-      <Controls onSearch={handleSearch} />
+      <Controls onSearch={handleSearch} onChangeSortValue={onChangeSortValue} />
       <List>
         {filteredCountries.map((country) => {
           const countryInfo = {

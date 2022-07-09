@@ -1,15 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
-
-const Sort = () => {
+// import styled from 'styled-components';
+import clsx from 'clsx';
+const Sort = ({onChangeSortValue}) => {
   const [isShow, setIsShow] = useState(false);
   const [sortName, setSortName] = useState({ label: 'population(A-Z)', value: 'population-up' });
   const sortRef = useRef();
   const options = [
-    { label: 'population (A-Z)', value: 'population-up' },
-    { label: 'population (Z-A)', value: 'population-dawn' },
-    { label: 'alphabet (A-Z)', value: 'alphabet-up' },
-    { label: 'alphabet (Z-A)', value: 'alphabet-dawn' },
+    { label: 'population (A-Z)', value: 'populationUp' },
+    { label: 'population (Z-A)', value: 'populationDawn' },
+    { label: 'alphabet (A-Z)', value: 'alphabetUp' },
+    { label: 'alphabet (Z-A)', value: 'alphabetDawn' },
   ];
   const handleToggleVisible = () => {
     setIsShow((prev) => !prev);
@@ -19,7 +19,7 @@ const Sort = () => {
     const handleClickOutside = (e) => {
       if (!e.path.includes(sortRef.current)) {
         setIsShow(false);
-        console.log('click outside');
+       // console.log('click outside');
       }
     };
     document.body.addEventListener('click', handleClickOutside);
@@ -43,16 +43,19 @@ const Sort = () => {
         <b>Сортировка по:</b>
         <span
           onClick={() => {
-            console.log('click');
+            //console.log('click');
             handleToggleVisible();
           }}>
          { sortName.label}
         </span>
       </div>
-      <div className="sort__popup">
-        <ul className={!isShow ? 'hide' : ''}>
+      <div className=  {clsx(!isShow ? 'hide' : '',"sort__popup")}>
+        <ul>
           {options.map((item, index) => (
-            <li key={Date.now() + '-' + index} onClick={()=>setSortName(item)}>{item.label}</li>
+            <li key={Date.now() + '-' + index} onClick={()=>{
+              setSortName(item)
+              onChangeSortValue(item.value)
+            }}>{item.label}</li>
           ))}
         </ul>
       </div>

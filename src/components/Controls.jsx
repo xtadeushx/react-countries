@@ -24,7 +24,7 @@ const Wrapper = styled.div`
   }
 `;
 
-const Controls = ({ onSearch }) => {
+const Controls = ({ onSearch, onChangeSortValue }) => {
   const [search, setSearch] = useState('');
   const [region, setRegion] = useState('');
 
@@ -37,7 +37,7 @@ const Controls = ({ onSearch }) => {
     <>
       <Wrapper>
         <Search search={search} setSearch={setSearch} />
-        <Sort/>
+        <Sort onChangeSortValue={onChangeSortValue}/>
         <CustomSelect
           options={options}
           placeholder="filter by region"
