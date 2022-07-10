@@ -101,9 +101,9 @@ const countriesSlice = createSlice({
     },
     handleSearch(state, action) {
       if (!action.payload) {
-        state.filteredCountryByRegion = state.countries;
+        state.filteredCountryByRegion = state.filteredCountryByRegion;
       }
-      state.filteredCountryByRegion = state.countries.filter((item) =>
+      state.filteredCountryByRegion = state.filteredCountryByRegion.filter((item) =>
         item.name.toLowerCase().startsWith(action.payload.toLowerCase()),
       );
     },

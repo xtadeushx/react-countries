@@ -20,9 +20,10 @@ import { ErrorMessage } from '../components/ErrorMessage';
 
 const HomePage = () => {
   const dispatch = useDispatch();
-  const { status, error, filteredCountryByRegion, region, searchValue, sortValue } = useSelector((state) => state.country);
+  const { status, error, filteredCountryByRegion, region, searchValue, sortValue } = useSelector(
+    (state) => state.country,
+  );
 
-console.log(sortValue.value);
   useEffect(() => {
     setTimeout(() => {
       dispatch(fetchCountries(ALL_COUNTRIES));
@@ -31,15 +32,20 @@ console.log(sortValue.value);
 
   useEffect(() => {
     dispatch(handleFilterByRegion(region));
-    dispatch(handleSearch(searchValue)); 
-    dispatch(handleSortFunc(sortValue));
-  }, [region, searchValue, sortValue]);
+  }, [region]);
 
+  useEffect(() => {
+    dispatch(handleSearch(searchValue));
+  }, [searchValue]);
+
+  useEffect(() => {
+    dispatch(handleSortFunc(sortValue));
+  }, [sortValue]);
 
   return (
     <>
       {' '}
-      <Controls searchValue={searchValue} region={region} sortValue={sortValue}/>
+      <Controls searchValue={searchValue} region={region} sortValue={sortValue} />
       {status === 'loading' ? (
         <div
           style={{
