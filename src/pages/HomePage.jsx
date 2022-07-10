@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo, useReducer, useState } from 'react';
-// import axios from 'axios';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
+
 import { List } from '../components/List';
 import Controls from '../components/Controls';
 import { Card } from '../components/Card';
@@ -11,19 +11,17 @@ import {
   fetchCountries,
   handleSortFunc,
   handleFilterByRegion,
+  handleSearch,
 } from '../redux/storeSlices/countriesSlice';
+
 import { MyLoader } from '../components/MyLoader';
 import { ErrorMessage } from '../components/ErrorMessage';
 
-let collator = new Intl.Collator();
-
 const HomePage = () => {
   const dispatch = useDispatch();
-  const { countries, status, error, filteredCountryByRegion } = useSelector((state) => state.country);
+  const { status, error, filteredCountryByRegion, region, searchValue } = useSelector((state) => state.country);
 
-  // const [filteredCountries, setFilteredCountries] = useState(countries);
   const [sortValues, setSortValues] = useState('alphabetUp');
-  const [region, setRegion] = useState('');
   console.log(region);
 
   useEffect(() => {
@@ -31,73 +29,19 @@ const HomePage = () => {
       dispatch(fetchCountries(ALL_COUNTRIES));
     }, 2000);
   }, []);
-
-  // const handleSearch = useMemo(
-  //   () => (search, region) => {
-  //     let data = [...countries];
-  //     if (region) {
-  //       data = data.filter((item) => item.region.includes(region));
-  //     }
-  //     if (search) {
-  //       data = data.filter((item) => item.name.toLowerCase().startsWith(search.toLowerCase()));
-  //     }
-  //     setFilteredCountries(data);
-  //   },
-  //   [countries],
-  // );
-
-  // useEffect(() => {
-  //   handleSearch();
-  // }, [countries]);
+  
   useEffect(() => {
     dispatch(handleFilterByRegion(region));
-  }, [region]);
-
-  useEffect(() => {
+    dispatch(handleSearch(searchValue)); 
     dispatch(handleSortFunc(sortValues));
-  }, [sortValues]);
+  }, [region, searchValue, sortValues]);
 
-  // function handleSortFunc(sort) {
-  //   let data = JSON.parse(JSON.stringify(filteredCountries));
 
-  //   switch (sort) {
-  //     case 'populationUp':
-  //       data.sort((a, b) => a.population - b.population);
-  //       break;
-  //     case 'populationDown':
-  //       data.sort((a, b) => a.population - b.population).reverse();
-  //       break;
-  //     case 'areaUp':
-  //       data.sort((a, b) => a.area - b.area);
-  //       break;
-  //     case 'areaDown':
-  //       data.sort((a, b) => a.area - b.area).reverse();
-  //       break;
-  //     case 'alphabetUp':
-  //       data.sort((a, b) => collator.compare(a.name, b.name));
-  //       break;
-  //     case 'alphabetDown':
-  //       data.sort((a, b) => collator.compare(a.name, b.name)).reverse();
-  //       break;
-  //     case 'capitalUp':
-  //       data.sort((a, b) => collator.compare(a.capital, b.capital));
-  //       break;
-  //     case 'capitalDown':
-  //       data.sort((a, b) => collator.compare(a.capital, b.capital)).reverse();
-  //       break;
-
-  //     default:
-  //       return data;
-  //   }
-  //   setFilteredCountries(data);
-  // }
-
-  const onChangeSortValue = (data) => setSortValues(data);
-  const onChangeSortRegion = (data) => setRegion(data);
+  const onChangeSortValue = (value) => setSortValues(value)
   return (
     <>
       {' '}
-      <Controls onChangeSortRegion={onChangeSortRegion} onChangeSortValue={onChangeSortValue}  region={region} setRegion={setRegion}/>
+      <Controls searchValue={searchValue} region={region} onChangeSortValue={onChangeSortValue}/>
       {status === 'loading' ? (
         <div
           style={{

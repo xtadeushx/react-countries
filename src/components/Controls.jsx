@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+
+import { useSelector, useDispatch } from 'react-redux';
+
+import { onSetRegion } from '../redux/storeSlices/countriesSlice';
+
 import { CustomSelect } from './CustomSelect';
 import Search from './Search';
 import { Sort } from './Sort';
@@ -24,29 +29,21 @@ const Wrapper = styled.div`
   }
 `;
 
-const Controls = ({ onChangeSortValue,onChangeSortRegion,region,setRegion }) => {
-  // const [search, setSearch] = useState('');
-console.log(region);
-  // useEffect(() => {
-  //   const currentRegion = region?.value || ''
-  //   onChangeSortRegion(currentRegion);
-  //   //eslint-disable-next-line
-  // }, [region]);
+const Controls = ({ region, searchValue, onChangeSortValue }) => {
+  const dispatch = useDispatch();
+  const changedRegion = (e) => dispatch(onSetRegion(e.value));
   return (
     <>
       <Wrapper>
-        <Search />
-        <Sort onChangeSortValue={onChangeSortValue}/>
+        <Search searchValue={searchValue} />
+        <Sort onChangeSortValue={onChangeSortValue} />
         <CustomSelect
           options={options}
           placeholder="filter by region"
           isClearable
           isSearchable={false}
           value={region}
-          onChange={(e)=>{
-            setRegion(e.value);
-            //onChangeSortRegion(region);
-          }}
+          onChange={changedRegion}
         />
       </Wrapper>
     </>

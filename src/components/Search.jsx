@@ -1,6 +1,9 @@
 import styled from 'styled-components';
 import { IoSearch } from "react-icons/io5";
 
+import { useSelector, useDispatch } from 'react-redux';
+import { onSetSearchValue } from '../redux/storeSlices/countriesSlice';
+
 
 import React from 'react'
 
@@ -33,11 +36,13 @@ color: var( --colors-text );
 background-color: var( --colors-ui-bas);
 `;
 
-const Search = ({search, setSearch, }) => {
+const Search = ({searchValue}) => {
+  const dispatch = useDispatch();
+  const changeSearchValue = (e) => dispatch(onSetSearchValue(e.target.value));
   return (
     <InputContainer>
         <IoSearch/>
-        <Input value={search} onChange={(e)=>setSearch(e.target.value)}/>
+        <Input value={searchValue} onChange={changeSearchValue}/>
     </InputContainer>
   )
 }
