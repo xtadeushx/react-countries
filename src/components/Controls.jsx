@@ -24,19 +24,18 @@ const Wrapper = styled.div`
   }
 `;
 
-const Controls = ({ onSearch, onChangeSortValue }) => {
-  const [search, setSearch] = useState('');
-  const [region, setRegion] = useState('');
-
-  useEffect(() => {
-    const currentRegion = region?.value || ''
-    onSearch(search, currentRegion);
-    //eslint-disable-next-line
-  }, [search, region]);
+const Controls = ({ onChangeSortValue,onChangeSortRegion,region,setRegion }) => {
+  // const [search, setSearch] = useState('');
+console.log(region);
+  // useEffect(() => {
+  //   const currentRegion = region?.value || ''
+  //   onChangeSortRegion(currentRegion);
+  //   //eslint-disable-next-line
+  // }, [region]);
   return (
     <>
       <Wrapper>
-        <Search search={search} setSearch={setSearch} />
+        <Search />
         <Sort onChangeSortValue={onChangeSortValue}/>
         <CustomSelect
           options={options}
@@ -44,7 +43,10 @@ const Controls = ({ onSearch, onChangeSortValue }) => {
           isClearable
           isSearchable={false}
           value={region}
-          onChange={setRegion}
+          onChange={(e)=>{
+            setRegion(e.value);
+            //onChangeSortRegion(region);
+          }}
         />
       </Wrapper>
     </>

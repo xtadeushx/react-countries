@@ -23,7 +23,6 @@ const Sort = ({ onChangeSortValue }) => {
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (!e.path.includes(sortRef.current)) {
-        console.log(e.path);
         setIsShow(false);
       }
     };

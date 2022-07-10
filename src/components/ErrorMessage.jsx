@@ -6,7 +6,7 @@ const ErrorMessage = ({ text }) => {
     
       <h2>Sorry,  <span width="40px" height="40px">😰</span></h2>
       
-      <p>your response was invalid with error: <strong>{text}</strong></p>
+      <p>{text}</p>
     </div>
   );
 };
