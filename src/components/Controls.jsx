@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import { useSelector, useDispatch } from 'react-redux';
 
-import { onSetRegion } from '../redux/storeSlices/countriesSlice';
+import { onSetRegion, onSetSortValue } from '../redux/storeSlices/countriesSlice';
 
 import { CustomSelect } from './CustomSelect';
 import Search from './Search';
@@ -29,14 +29,14 @@ const Wrapper = styled.div`
   }
 `;
 
-const Controls = ({ region, searchValue, onChangeSortValue }) => {
+const Controls = ({ region, searchValue, onChangeSortValue,sortValue }) => {
   const dispatch = useDispatch();
   const changedRegion = (e) => dispatch(onSetRegion(e.value));
   return (
     <>
       <Wrapper>
         <Search searchValue={searchValue} />
-        <Sort onChangeSortValue={onChangeSortValue} />
+        <Sort onChangeSortValue={onChangeSortValue} sortValue={sortValue}/>
         <CustomSelect
           options={options}
           placeholder="filter by region"

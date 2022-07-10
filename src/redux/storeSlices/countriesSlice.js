@@ -22,9 +22,10 @@ const initialState = {
   countries: [],
   filteredCountryByRegion: [],
   region: '',
-  searchValue:'',
+  searchValue: '',
   status: null,
   error: null,
+  sortValue: { label: 'alphabet (A-Z)', value: 'alphabetUp' },
 };
 
 const collator = new Intl.Collator();
@@ -34,30 +35,44 @@ const countriesSlice = createSlice({
   initialState,
   reducers: {
     handleSortFunc(state, action) {
-      switch (action.payload) {
+      switch (action.payload.value) {
         case 'populationUp':
-          state.filteredCountryByRegion.sort((a, b) => a.population - b.population);
+          state.filteredCountryByRegion = state.filteredCountryByRegion.sort(
+            (a, b) => a.population - b.population,
+          );
           break;
         case 'populationDown':
-          state.filteredCountryByRegion.sort((a, b) => a.population - b.population).reverse();
+          state.filteredCountryByRegion = state.filteredCountryByRegion
+            .sort((a, b) => a.population - b.population)
+            .reverse();
           break;
         case 'areaUp':
-          state.filteredCountryByRegion.sort((a, b) => a.area - b.area);
+          state.filteredCountryByRegion = state.filteredCountryByRegion.sort(
+            (a, b) => a.area - b.area,
+          );
           break;
         case 'areaDown':
-          state.filteredCountryByRegion.sort((a, b) => a.area - b.area).reverse();
+          state.filteredCountryByRegion = state.filteredCountryByRegion
+            .sort((a, b) => a.area - b.area)
+            .reverse();
           break;
         case 'alphabetUp':
-          state.filteredCountryByRegion.sort((a, b) => collator.compare(a.name, b.name));
+          state.filteredCountryByRegion = state.filteredCountryByRegion.sort((a, b) =>
+            collator.compare(a.name, b.name),
+          );
           break;
         case 'alphabetDown':
-          state.filteredCountryByRegion.sort((a, b) => collator.compare(a.name, b.name)).reverse();
+          state.filteredCountryByRegion = state.filteredCountryByRegion
+            .sort((a, b) => collator.compare(a.name, b.name))
+            .reverse();
           break;
         case 'capitalUp':
-          state.filteredCountryByRegion.sort((a, b) => collator.compare(a.capital, b.capital));
+          state.filteredCountryByRegion = state.filteredCountryByRegion.sort((a, b) =>
+            collator.compare(a.capital, b.capital),
+          );
           break;
         case 'capitalDown':
-          state.filteredCountryByRegion
+          state.filteredCountryByRegion = state.filteredCountryByRegion
             .sort((a, b) => collator.compare(a.capital, b.capital))
             .reverse();
           break;
@@ -65,7 +80,9 @@ const countriesSlice = createSlice({
         default:
           return state.filteredCountryByRegion;
       }
-      // setFilteredCountries(data);
+    },
+    onSetSortValue(state, action) {
+      state.sortValue = action.payload;
     },
     handleFilterByRegion(state, action) {
       if (!action.payload) {
@@ -75,8 +92,11 @@ const countriesSlice = createSlice({
         item.region.includes(action.payload),
       );
     },
+    onSetRegion(state, action) {
+      state.region = action.payload;
+    },
 
-    onSetSearchValue(state, action){
+    onSetSearchValue(state, action) {
       state.searchValue = action.payload;
     },
     handleSearch(state, action) {
@@ -87,14 +107,9 @@ const countriesSlice = createSlice({
         item.name.toLowerCase().startsWith(action.payload.toLowerCase()),
       );
     },
-
-    onSetRegion(state, action) {
-      state.region = action.payload;
-    },
-  
   },
   extraReducers: {
-    [fetchCountries.pending]: (state, action) => {
+    [fetchCountries.pending]: (state) => {
       state.status = 'loading';
       state.error = null;
     },
@@ -111,4 +126,11 @@ const countriesSlice = createSlice({
 
 export default countriesSlice.reducer;
 
-export const { handleSortFunc, handleFilterByRegion, handleSearch,onSetRegion, onSetSearchValue } = countriesSlice.actions;
+export const {
+  handleSortFunc,
+  handleFilterByRegion,
+  handleSearch,
+  onSetRegion,
+  onSetSearchValue,
+  onSetSortValue,
+} = countriesSlice.actions;

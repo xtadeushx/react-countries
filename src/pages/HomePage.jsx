@@ -12,6 +12,7 @@ import {
   handleSortFunc,
   handleFilterByRegion,
   handleSearch,
+  onSetSortValue,
 } from '../redux/storeSlices/countriesSlice';
 
 import { MyLoader } from '../components/MyLoader';
@@ -19,29 +20,26 @@ import { ErrorMessage } from '../components/ErrorMessage';
 
 const HomePage = () => {
   const dispatch = useDispatch();
-  const { status, error, filteredCountryByRegion, region, searchValue } = useSelector((state) => state.country);
+  const { status, error, filteredCountryByRegion, region, searchValue, sortValue } = useSelector((state) => state.country);
 
-  const [sortValues, setSortValues] = useState('alphabetUp');
-  console.log(region);
-
+console.log(sortValue.value);
   useEffect(() => {
     setTimeout(() => {
       dispatch(fetchCountries(ALL_COUNTRIES));
     }, 2000);
   }, []);
-  
+
   useEffect(() => {
     dispatch(handleFilterByRegion(region));
     dispatch(handleSearch(searchValue)); 
-    dispatch(handleSortFunc(sortValues));
-  }, [region, searchValue, sortValues]);
+    dispatch(handleSortFunc(sortValue));
+  }, [region, searchValue, sortValue]);
 
 
-  const onChangeSortValue = (value) => setSortValues(value)
   return (
     <>
       {' '}
-      <Controls searchValue={searchValue} region={region} onChangeSortValue={onChangeSortValue}/>
+      <Controls searchValue={searchValue} region={region} sortValue={sortValue}/>
       {status === 'loading' ? (
         <div
           style={{

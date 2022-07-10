@@ -1,21 +1,20 @@
 import React, { useEffect, useRef, useState } from 'react';
 // import styled from 'styled-components';
 import clsx from 'clsx';
-const Sort = ({ onChangeSortValue }) => {
+
+import { onSetSortValue } from '../redux/storeSlices/countriesSlice';
+import { useDispatch,useSelector } from 'react-redux';
+import { options } from '../config';
+
+const Sort = () => {
+
+
+  const dispatch = useDispatch();
+  const {sortValue } = useSelector((state) => state.country);
   const [isShow, setIsShow] = useState(false);
-  const [sortName, setSortName] = useState({ label: 'alphabet (A-Z)', value: 'alphabetUp' });
   const sortRef = useRef();
-  const options = [
-    { label: 'population (A-Z)', value: 'populationUp' },
-    { label: 'population (Z-A)', value: 'populationDown' },
-    { label: 'alphabet (A-Z)', value: 'alphabetUp' },
-    { label: 'alphabet (Z-A)', value: 'alphabetDown' },
-    { label: 'capital (A-Z)', value: 'capitalUp' },
-    { label: 'capital (Z-A)', value: 'capitalDown' },
-    { label: 'area (A-Z)', value: 'areaUp' },
-    { label: 'area (Z-A)', value: 'areaDown' },
-   
-  ];
+
+
   const handleToggleVisible = () => {
     setIsShow((prev) => !prev);
   };
@@ -49,7 +48,7 @@ const Sort = ({ onChangeSortValue }) => {
           onClick={() => {
             handleToggleVisible();
           }}>
-          {sortName.label}
+          {sortValue.label}
         </span>
       </div>
       <div className={clsx(!isShow ? 'hide' : '', 'sort__popup')}>
@@ -58,8 +57,8 @@ const Sort = ({ onChangeSortValue }) => {
             <li
               key={Date.now() + '-' + index}
               onClick={() => {
-                setSortName(item);
-                onChangeSortValue(item.value);
+                //setSortName(item);
+                dispatch(onSetSortValue(item));
                 handleToggleVisible();
               }}>
               {item.label}
