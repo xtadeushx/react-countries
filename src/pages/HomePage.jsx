@@ -49,7 +49,6 @@ const HomePage = ({ setIsLoading }) => {
     handleSortFunc(sortValues);
   }, [sortValues]);
 
-
   function handleSortFunc(sort) {
     let data = JSON.parse(JSON.stringify(filteredCountries));
 
@@ -59,11 +58,13 @@ const HomePage = ({ setIsLoading }) => {
         break;
       case 'populationDown':
         data.sort((a, b) => a.population - b.population).reverse();
+        break;
       case 'areaUp':
         data.sort((a, b) => a.area - b.area);
         break;
       case 'areaDown':
         data.sort((a, b) => a.area - b.area).reverse();
+        break;
       case 'alphabetUp':
         data.sort((a, b) => colorator.compare(a.name, b.name));
         break;
@@ -76,17 +77,14 @@ const HomePage = ({ setIsLoading }) => {
       case 'capitalDown':
         data.sort((a, b) => colorator.compare(a.capital, b.capital)).reverse();
         break;
-       
-      
 
       default:
-      return  data;
+        return data;
     }
     setFilteredCountries(data);
-  };
+  }
 
   const onChangeSortValue = (data) => setSortValues(data);
-
   return (
     <>
       {' '}
@@ -111,7 +109,7 @@ const HomePage = ({ setIsLoading }) => {
               },
               {
                 title: 'Area',
-                description: country.area
+                description: country.area + ' ' + 'km',
               },
             ],
           };
