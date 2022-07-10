@@ -1,31 +1,38 @@
 import React, { useEffect, useMemo, useReducer, useState } from 'react';
-import axios from 'axios';
+// import axios from 'axios';
+
+import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { List } from '../components/List';
 import Controls from '../components/Controls';
 import { Card } from '../components/Card';
 import { ALL_COUNTRIES } from '../config';
+import { fetchCountries } from '../redux/storeSlices/contriesSlice';
 
-let colorator = new Intl.Collator();
+let collator = new Intl.Collator();
 
 const HomePage = ({ setIsLoading }) => {
-  const [countries, setCountries] = useState([]);
+  // const [countries, setCountries] = useState([]);
+  const dispatch = useDispatch();
+  const { countries, status, error } = useSelector((state) => state.country);
   const [filteredCountries, setFilteredCountries] = useState(countries);
   const [sortValues, setSortValues] = useState('alphabetUp');
 
+console.log(status, error);
+
   useEffect(() => {
     setIsLoading((prev) => !prev);
-    getFetchCountries();
+   dispatch(fetchCountries(ALL_COUNTRIES))
     setIsLoading((prev) => !prev);
   }, []);
 
-  const getFetchCountries = () => {
-    try {
-      axios.get(ALL_COUNTRIES).then(({ data }) => setCountries(data));
-    } catch (error) {
-      throw new Error(error);
-    }
-  };
+  // const getFetchCountries = () => {
+  //   try {
+  //     axios.get(ALL_COUNTRIES).then(({ data }) => setCountries(data));
+  //   } catch (error) {
+  //     throw new Error(error);
+  //   }
+  // };
 
   const handleSearch = useMemo(
     () => (search, region) => {
@@ -66,16 +73,16 @@ const HomePage = ({ setIsLoading }) => {
         data.sort((a, b) => a.area - b.area).reverse();
         break;
       case 'alphabetUp':
-        data.sort((a, b) => colorator.compare(a.name, b.name));
+        data.sort((a, b) => collator.compare(a.name, b.name));
         break;
       case 'alphabetDown':
-        data.sort((a, b) => colorator.compare(a.name, b.name)).reverse();
+        data.sort((a, b) => collator.compare(a.name, b.name)).reverse();
         break;
       case 'capitalUp':
-        data.sort((a, b) => colorator.compare(a.capital, b.capital));
+        data.sort((a, b) => collator.compare(a.capital, b.capital));
         break;
       case 'capitalDown':
-        data.sort((a, b) => colorator.compare(a.capital, b.capital)).reverse();
+        data.sort((a, b) => collator.compare(a.capital, b.capital)).reverse();
         break;
 
       default:
