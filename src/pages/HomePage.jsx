@@ -59,10 +59,11 @@ const HomePage = ({ setIsLoading }) => {
         break;
       case 'populationDown':
         data.sort((a, b) => a.population - b.population).reverse();
+      case 'areaUp':
+        data.sort((a, b) => a.area - b.area);
         break;
-      case 'alphabetDown':
-        data.sort((a, b) => colorator.compare(b.name, a.name));
-        break;
+      case 'areaDown':
+        data.sort((a, b) => a.area - b.area).reverse();
       case 'alphabetUp':
         data.sort((a, b) => colorator.compare(a.name, b.name));
         break;
@@ -75,6 +76,8 @@ const HomePage = ({ setIsLoading }) => {
       case 'capitalDown':
         data.sort((a, b) => colorator.compare(a.capital, b.capital)).reverse();
         break;
+       
+      
 
       default:
       return  data;
@@ -105,6 +108,10 @@ const HomePage = ({ setIsLoading }) => {
               {
                 title: 'Capital',
                 description: country.capital,
+              },
+              {
+                title: 'Area',
+                description: country.area
               },
             ],
           };

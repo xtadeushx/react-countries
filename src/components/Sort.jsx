@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 // import styled from 'styled-components';
 import clsx from 'clsx';
-const Sort = ({onChangeSortValue}) => {
+const Sort = ({ onChangeSortValue }) => {
   const [isShow, setIsShow] = useState(false);
   const [sortName, setSortName] = useState({ label: 'alphabet (A-Z)', value: 'alphabetUp' });
   const sortRef = useRef();
@@ -12,6 +12,9 @@ const Sort = ({onChangeSortValue}) => {
     { label: 'alphabet (Z-A)', value: 'alphabetDown' },
     { label: 'capital (A-Z)', value: 'capitalUp' },
     { label: 'capital (Z-A)', value: 'capitalDown' },
+    { label: 'area (A-Z)', value: 'areaUp' },
+    { label: 'area (Z-A)', value: 'areaDown' },
+   
   ];
   const handleToggleVisible = () => {
     setIsShow((prev) => !prev);
@@ -20,8 +23,8 @@ const Sort = ({onChangeSortValue}) => {
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (!e.path.includes(sortRef.current)) {
+        console.log(e.path);
         setIsShow(false);
-       // console.log('click outside');
       }
     };
     document.body.addEventListener('click', handleClickOutside);
@@ -45,20 +48,23 @@ const Sort = ({onChangeSortValue}) => {
         <b>Сортировка по:</b>
         <span
           onClick={() => {
-            //console.log('click');
             handleToggleVisible();
           }}>
-         { sortName.label}
+          {sortName.label}
         </span>
       </div>
-      <div className=  {clsx(!isShow ? 'hide' : '',"sort__popup")}>
+      <div className={clsx(!isShow ? 'hide' : '', 'sort__popup')}>
         <ul>
           {options.map((item, index) => (
-            <li key={Date.now() + '-' + index} onClick={()=>{
-              setSortName(item)
-              onChangeSortValue(item.value)
-            
-            }}>{item.label}</li>
+            <li
+              key={Date.now() + '-' + index}
+              onClick={() => {
+                setSortName(item);
+                onChangeSortValue(item.value);
+                handleToggleVisible();
+              }}>
+              {item.label}
+            </li>
           ))}
         </ul>
       </div>
