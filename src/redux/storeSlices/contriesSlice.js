@@ -27,7 +27,7 @@ const countriesSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: {
-    [fetchCountries.padding]: (state, action) => {
+    [fetchCountries.pending]: (state, action) => {
       state.status = 'loading';
       state.error = null;
     },

@@ -8,6 +8,8 @@ import Controls from '../components/Controls';
 import { Card } from '../components/Card';
 import { ALL_COUNTRIES } from '../config';
 import { fetchCountries } from '../redux/storeSlices/contriesSlice';
+import { MyLoader } from '../components/MyLoader';
+import { ErrorMessage } from '../components/ErrorMessage';
 
 let collator = new Intl.Collator();
 
@@ -18,12 +20,12 @@ const HomePage = ({ setIsLoading }) => {
   const [filteredCountries, setFilteredCountries] = useState(countries);
   const [sortValues, setSortValues] = useState('alphabetUp');
 
-console.log(status, error);
+  console.log(status, error);
 
   useEffect(() => {
-    setIsLoading((prev) => !prev);
-   dispatch(fetchCountries(ALL_COUNTRIES))
-    setIsLoading((prev) => !prev);
+    setTimeout(() => {
+      dispatch(fetchCountries(ALL_COUNTRIES));
+    }, 2000);
   }, []);
 
   // const getFetchCountries = () => {
@@ -96,37 +98,48 @@ console.log(status, error);
     <>
       {' '}
       <Controls onSearch={handleSearch} onChangeSortValue={onChangeSortValue} />
-      <List>
-        {filteredCountries.map((country) => {
-          const countryInfo = {
-            img: country.flags.png,
-            name: country.name,
-            info: [
-              {
-                title: 'Population',
-                description: country.population.toLocaleString(),
-              },
-              {
-                title: 'Region',
-                description: country.region,
-              },
-              {
-                title: 'Capital',
-                description: country.capital,
-              },
-              {
-                title: 'Area',
-                description: country.area + ' ' + 'km',
-              },
-            ],
-          };
-          return (
-            <Link key={country.name} to={`/country/${country.name.toLowerCase()}`}>
-              <Card key={country.name} {...countryInfo} />
-            </Link>
-          );
-        })}
-      </List>
+      {status === 'loading' ? (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '4rem' }}>
+          {' '}
+          {[...new Array(16)].map((_, index) => (
+            <MyLoader key={index} />
+          ))}
+        </div>
+      ) : status === 'rejected' ? (
+        <ErrorMessage text="server error" />
+      ) : (
+        <List>
+          {filteredCountries.map((country) => {
+            const countryInfo = {
+              img: country.flags.png,
+              name: country.name,
+              info: [
+                {
+                  title: 'Population',
+                  description: country.population.toLocaleString(),
+                },
+                {
+                  title: 'Region',
+                  description: country.region,
+                },
+                {
+                  title: 'Capital',
+                  description: country.capital,
+                },
+                {
+                  title: 'Area',
+                  description: country.area + ' ' + 'km',
+                },
+              ],
+            };
+            return (
+              <Link key={country.name} to={`/country/${country.name.toLowerCase()}`}>
+                <Card key={country.name} {...countryInfo} />
+              </Link>
+            );
+          })}
+        </List>
+      )}
     </>
   );
 };
